@@ -1,6 +1,10 @@
 NAME    =       pongApi.out
 
 SRC_DIR         =	src
+CONTROLLERS_DIR	=	controllers/
+DTO_DIR			=	model/dtos/
+
+
 PATH_OBJ        =	obj
 
 HEADERS         =	includes/
@@ -13,8 +17,8 @@ FLAG_PISTACHE	=	-lpistache
 
 
 SRC_FILES		=	main.cpp \
-					pistacheHandler.cpp
-
+					$(CONTROLLERS_DIR)UserController.cpp \
+					$(DTO_DIR)UserDto.cpp
 
 
 SRC				=	$(addprefix $(SRC_DIR)/, $(SRC_FILES))
@@ -28,6 +32,8 @@ $(NAME):	$(OBJ)
 
 $(PATH_OBJ)/%.o:	$(SRC_DIR)/%.cpp
 	@mkdir -p $(PATH_OBJ)
+	@mkdir -p $(PATH_OBJ)/$(CONTROLLERS_DIR)
+	@mkdir -p $(PATH_OBJ)/$(DTO_DIR)
 	$(CC) -g $(FLAGS) -c -I $(HEADERS) -o $@ $<
 
 clean:
