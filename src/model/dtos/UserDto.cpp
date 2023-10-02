@@ -41,22 +41,13 @@ std::string	UserDto::getEmail() const
 
 UserDto *UserDto::loginDto(const std::string &body)
 {
-	size_t		start;
-	std::string tmpLogin = "";
-	std::string tmpEmail = "";
-
-	if (body.find("login") != body.npos)
+	if (body.find("login") != body.npos && body.find("email") != body.npos)
 	{
-		start = body.find(":");
-		tmpLogin = body.substr(body.find_first_of("\"", start) + 1, body.find_last_of(",") - (start + 4));
-	}
-	if (body.find("email") != body.npos)
-	{
+		size_t	start = body.find(":");
+		std::string tmpLogin = body.substr(body.find_first_of("\"", start) + 1, body.find_last_of(",") - (start + 4));
 		start = body.find(":", start + 1);
-		tmpEmail = body.substr(body.find_first_of("\"", start) + 1, body.find_last_of("\n") - (start + 4));
-	}
-	if (tmpLogin.empty() || tmpEmail.empty())
-		throw "Error: There is no batata\n";
-	else
+		std::string tmpEmail = body.substr(body.find_first_of("\"", start) + 1, body.find_last_of("\n") - (start + 4));
 		return (new UserDto(tmpLogin, tmpEmail));
+	}
+	throw ExceptionController("ERROR: Invalid data\n");
 }

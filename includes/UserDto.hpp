@@ -2,6 +2,7 @@
 # define USERDTO_HPP
 
 #include <iostream>
+#include "ExceptionController.hpp"
 
 class UserDto
 {
