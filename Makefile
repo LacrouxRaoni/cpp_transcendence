@@ -18,6 +18,7 @@ FLAG_PISTACHE	=	-lpistache
 
 SRC_FILES		=	main.cpp \
 					$(CONTROLLERS_DIR)UserController.cpp \
+					$(CONTROLLERS_DIR)ExceptionController.cpp \
 					$(DTO_DIR)UserDto.cpp
 
 

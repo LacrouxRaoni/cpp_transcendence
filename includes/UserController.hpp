@@ -3,7 +3,9 @@
 
 #include <pistache/endpoint.h>
 #include <pistache/router.h>
+
 #include "UserDto.hpp"
+#include "ExceptionController.hpp"
 
 using namespace Pistache;
 

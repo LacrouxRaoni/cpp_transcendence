@@ -7,7 +7,7 @@ void setRoutes(Pistache::Rest::Router &router)
 {
 	UserController userController;
 
-	Pistache::Rest::Routes::Get(router, "/login", Pistache::Rest::Routes::bind(&UserController::loginController, &userController));
+	Pistache::Rest::Routes::Post(router, "/login", Pistache::Rest::Routes::bind(&UserController::loginController, &userController));
 }
 
 void runServer()
@@ -24,8 +24,13 @@ void runServer()
 	setRoutes(router);
 
 	server.setHandler(router.handler()); 
-	server.serve();
-
+	try{
+		server.serve();
+	} catch (std::exception &e)
+	{
+		std::cout << e.what() << std::endl;
+		server.shutdown();
+	}
 }
 
 int main()

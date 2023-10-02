@@ -16,12 +16,12 @@ class UserDto
 		UserDto(const UserDto &rsc);
 		UserDto& operator=(UserDto const &rsc);
 
-		//METHODS
-		void		loginDto(const std::string &body);
-
 		//GETTERS
 		std::string	getLogin() const;
 		std::string	getEmail() const;
+
+		//METHODS
+		UserDto*	loginDto(const std::string &body);
 };
 
 #endif
