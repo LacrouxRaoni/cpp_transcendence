@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include "ExceptionController.hpp"
+#include <rapidjson/document.h>
+
 
 class UserDto
 {
