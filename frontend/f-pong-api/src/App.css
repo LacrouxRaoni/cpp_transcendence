@@ -1,0 +1,36 @@
+.App-header {
+	background-color: #6E609C;
+	min-height: 10vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: calc(10px + 2vmin);
+	color: white;
+	margin: 0;
+	margin-right: 10px;
+  }
+
+  .App-header-icon {
+	margin-right: 10px;
+	font-size: 24px;
+  }
+  
+  .App-footer {
+	background-color: #6E609C;
+	color: white;
+	padding: 10px;
+	text-align: left;
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	margin-bottom: 0;
+  }
+
+.App {
+  text-align: center;
+}
+
+
+
+
