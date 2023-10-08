@@ -1,5 +1,20 @@
-.App-header {
+body, html {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+  }
+
+.App {
+	display: flex;
+	flex-direction: column;
+	height: 100vh;
+	text-align: center;
+	background-color: blue;
+  }
+
+  .App-header {
 	background-color: #6E609C;
+	width: 100%;
 	min-height: 10vh;
 	display: flex;
 	align-items: center;
@@ -26,11 +41,5 @@
 	width: 100%;
 	margin-bottom: 0;
   }
-
-.App {
-  text-align: center;
-}
-
-
 
 

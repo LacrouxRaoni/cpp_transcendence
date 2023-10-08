@@ -7,7 +7,8 @@ void UserController::loginController(const Rest::Request& request, Http::Respons
 		UserDto userDto;
 
 		UserDto *teste = userDto.loginDto(request.body());
-		response.send(Http::Code::Ok, (teste->getLogin().c_str() + teste->getEmail()));
+		std::cout << teste->getToken() << std::endl;
+		response.send(Http::Code::Ok, (teste->getToken().c_str()));
 		delete teste;
 	}
 	catch(const ExceptionController &e)

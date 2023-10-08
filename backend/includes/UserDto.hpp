@@ -9,19 +9,17 @@
 class UserDto
 {
 	private:
-		std::string login;
-		std::string	email;
+		std::string token;
 
 	public:
 		UserDto();
-		UserDto(std::string login, std::string email);
+		UserDto(std::string token);
 		~UserDto();
 		UserDto(const UserDto &rsc);
 		UserDto& operator=(UserDto const &rsc);
 
 		//GETTERS
-		std::string	getLogin() const;
-		std::string	getEmail() const;
+		std::string	getToken() const;
 
 		//METHODS
 		UserDto*	loginDto(const std::string &body);
