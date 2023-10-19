@@ -3,10 +3,12 @@
 
 #include <pistache/endpoint.h>
 #include <pistache/router.h>
+#include <rapidjson/document.h>
 
 #include "ExceptionController.hpp"
 #include "UserDto.hpp"
 #include "UserService.hpp"
+
 
 
 using namespace Pistache;

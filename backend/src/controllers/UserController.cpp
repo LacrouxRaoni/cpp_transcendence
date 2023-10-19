@@ -2,19 +2,21 @@
 
 void UserController::loginController(const Rest::Request& request, Http::ResponseWriter response)
 {
+	response.headers().add<Http::Header::AccessControlAllowOrigin>("*");
+
 	try
 	{
 		UserDto userDto;
 
 		UserDto *tokenDto = userDto.loginDto(request.body());
 		UserService userService(tokenDto->getToken());
-		userService.treatTokenRequest(userService.getDtoChecker());	
+		std::string tmpReponse = userService.treatTokenRequest(userService.getDtoChecker());
 		delete tokenDto;
-		response.send(Http::Code::Ok, ("request well received"));
+		response.send(Http::Code::Ok, tmpReponse.c_str());
 		
 	}
 	catch(const ExceptionController &e)
 	{
-		response.send(Http::Code::Bad_Request ,e.what());
+		response.send(Http::Code::Bad_Request, e.what());
 	}
 }

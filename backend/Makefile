@@ -14,6 +14,7 @@ CC   			=	c++
 RM   			=	rm -rf
 FLAGS			=	-Wall -Wextra -Werror -std=c++17
 FLAG_PISTACHE	=	-lpistache
+FLAG_LIBCURL	=	-lcurl
 
 
 SRC_FILES		=	main.cpp \
@@ -30,7 +31,7 @@ all:	$(NAME)
 
 $(NAME):	$(OBJ)
 	@echo done!!
-	@$(CC) $(FLAGS) $(OBJ) -g -o $(NAME) $(FLAG_PISTACHE)
+	@$(CC) $(FLAGS) $(OBJ) -g -o $(NAME) $(FLAG_PISTACHE) $(FLAG_LIBCURL)
 
 $(PATH_OBJ)/%.o:	$(SRC_DIR)/%.cpp
 	@mkdir -p $(PATH_OBJ)

@@ -3,6 +3,7 @@
 
 #include <pistache/router.h>
 
+
 void setRoutes(Pistache::Rest::Router &router)
 {
 	UserController userController;
@@ -19,18 +20,14 @@ void runServer()
 	server.init(opts);
 
 
+
 	//INSTANTIEATE CONTROLLERS CLASSES AND SET ROUTES
 	Pistache::Rest::Router router;
 	setRoutes(router);
 
 	server.setHandler(router.handler()); 
-	try{
-		server.serve();
-	} catch (std::exception &e)
-	{
-		std::cout << e.what() << std::endl;
-		server.shutdown();
-	}
+	server.serve();
+
 }
 
 int main()
