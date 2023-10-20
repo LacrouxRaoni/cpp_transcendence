@@ -2,3 +2,4 @@
 
 	Pistache
 	rapidjson
+	libCurl

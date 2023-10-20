@@ -4,6 +4,7 @@ SRC_DIR         =	src
 CONTROLLERS_DIR	=	controllers/
 DTO_DIR			=	model/dtos/
 SERVICE_DIR		=	model/services/
+ENTITY_DIR		=	model/entities/
 
 PATH_OBJ        =	obj
 
@@ -15,13 +16,14 @@ RM   			=	rm -rf
 FLAGS			=	-Wall -Wextra -Werror -std=c++17
 FLAG_PISTACHE	=	-lpistache
 FLAG_LIBCURL	=	-lcurl
-
+FLAG_LIBPQ		=	-lpq
 
 SRC_FILES		=	main.cpp \
 					$(CONTROLLERS_DIR)UserController.cpp \
 					$(CONTROLLERS_DIR)ExceptionController.cpp \
 					$(DTO_DIR)UserDto.cpp \
-					$(SERVICE_DIR)UserService.cpp
+					$(SERVICE_DIR)UserService.cpp \
+					$(ENTITY_DIR)UserEntity.cpp
 
 
 SRC				=	$(addprefix $(SRC_DIR)/, $(SRC_FILES))
@@ -31,13 +33,14 @@ all:	$(NAME)
 
 $(NAME):	$(OBJ)
 	@echo done!!
-	@$(CC) $(FLAGS) $(OBJ) -g -o $(NAME) $(FLAG_PISTACHE) $(FLAG_LIBCURL)
+	@$(CC) $(FLAGS) $(OBJ) -g -o $(NAME) $(FLAG_PISTACHE) $(FLAG_LIBCURL) $(FLAG_LIBPQ)
 
 $(PATH_OBJ)/%.o:	$(SRC_DIR)/%.cpp
 	@mkdir -p $(PATH_OBJ)
 	@mkdir -p $(PATH_OBJ)/$(CONTROLLERS_DIR)
 	@mkdir -p $(PATH_OBJ)/$(DTO_DIR)
 	@mkdir -p $(PATH_OBJ)/$(SERVICE_DIR)
+	@mkdir -p $(PATH_OBJ)/$(ENTITY_DIR)
 	$(CC) -g $(FLAGS) -c -I $(HEADERS) -o $@ $<
 
 clean:

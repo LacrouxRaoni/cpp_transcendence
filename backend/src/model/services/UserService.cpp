@@ -27,7 +27,6 @@ UserService& UserService::operator=(UserService const &rsc)
 	return *this;
 }
 
-
 void UserService::getEnvData(std::vector<std::string> &env)
 {
 	std::string filename = ".env";
@@ -46,12 +45,7 @@ void UserService::buildRequestData(std::vector<std::string> &env, std::string &r
 	for (size_t i = 0; i < env.size(); i++)
 	{
 		if (i == 3)
-		{
-			requestData.append("code=");
-			requestData.append(token);
-			requestData.append("&");
-			requestData.append(env.at(i));
-		}
+			requestData += "code=" + token + "&" + env.at(i);
 		else if (i > 3)
 		{
 			apiUrl = env.at(i).substr(env.at(i).find("=") + 2, env.at(i).find_last_of("\"") - env.at(i).find("=") - 2);
@@ -59,10 +53,7 @@ void UserService::buildRequestData(std::vector<std::string> &env, std::string &r
 			break ;
 		}
 		else
-		{
-			requestData.append(env.at(i));
-			requestData.append("&");
-		}
+			requestData += env.at(i) + "&";
 	}
 
 	size_t found = requestData.find("\"");
@@ -86,28 +77,19 @@ std::string UserService::requestTo42Api(const char *param, const char *requestDa
     std::string	responseBody;
 
 	curl = curl_easy_init();
-	if (curl && method == 1)
+	if (curl)
 	{
 		curl_easy_setopt(curl, CURLOPT_URL, param);
-		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, requestData);
+		if (method == 1)
+			curl_easy_setopt(curl, CURLOPT_POSTFIELDS, requestData);
+		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, curl_slist_append(NULL, requestData));
 
-		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
-		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &responseBody);
-	}
-	else
-	{
-		curl_easy_setopt(curl, CURLOPT_URL, param);
-        curl_easy_setopt(curl, CURLOPT_HTTPHEADER, curl_slist_append(NULL, requestData));
-
-        // Clear response_data to capture the response of the second request
 		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
 		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &responseBody);
 	}
 	res = curl_easy_perform(curl);
-	if (res != CURLE_OK) 
-	{
+	if (res != CURLE_OK)
 	    std::cerr << "curl_easy_perform() failed: " << curl_easy_strerror(res) << std::endl;
-	}
 	curl_easy_cleanup(curl);
 	return responseBody;
 }
@@ -146,16 +128,14 @@ std::string UserService::treatTokenRequest(std::string token)
 
 	//PARTE 4
 	responseBody = requestTo42Api(apiUserInfo.c_str(), auth_bearer.c_str(),0);
-	
-	//PARTE 5
 	std::string fName = parse42Json(responseBody, "\"first_name\"");
 	std::string	lName = parse42Json(responseBody, "\"last_name\"");
 	std::string nickname = parse42Json(responseBody, "\"login\"");
 	std::string hrefImg = parse42Json(responseBody, "\"small\"");
+    responseBody.clear();
 
 
-
-
+	//PARTE5
 	std::cout << fName << std::endl;
 	std::cout << lName << std::endl;
 	std::cout << nickname << std::endl;
@@ -175,6 +155,7 @@ std::string UserService::treatTokenRequest(std::string token)
 	return responseBody;
 }
 
+//GETTERS
 std::string UserService::getDtoChecker() const
 {
 	return dtoChecker;
