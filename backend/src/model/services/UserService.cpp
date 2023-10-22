@@ -135,12 +135,20 @@ std::string UserService::treatTokenRequest(std::string token)
     responseBody.clear();
 
 
-	//PARTE5
 	std::cout << fName << std::endl;
 	std::cout << lName << std::endl;
 	std::cout << nickname << std::endl;
 	std::cout << hrefImg << std::endl;
 
+	UserEntity user(nickname);
+	if (user.selectUserInDb() == 0)
+		std::cout << "existe" << std::endl;
+	else
+	{
+		UserEntity newUser(fName, lName, nickname);
+		newUser.saveInDb();
+	}
+	
 	/*
 	oq tem no json para pegar
 	fName = "first_name"

@@ -19,6 +19,9 @@ class UserEntity
 		~UserEntity();
 		UserEntity(const UserEntity &rsc);
 		UserEntity& operator=(UserEntity const &rsc);
+
+		int	selectUserInDb();
+		void	saveInDb();
 };
 
 #endif

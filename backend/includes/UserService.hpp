@@ -2,10 +2,12 @@
 # define USERSERVICE_HPP
 
 #include "UserDto.hpp"
+#include "UserEntity.hpp"
+
 #include <fstream>
 #include <vector>
-
 #include <curl/curl.h>
+
 
 class UserService {
 	private:

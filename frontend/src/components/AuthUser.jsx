@@ -44,7 +44,6 @@ function AuthUser() {
 				.then(data => {
 				  // Handle the API response data
 				  console.log(data);
-				 <ProtectedRoutes /> 
 				  navigate('/main', { data });
 				 
 				})

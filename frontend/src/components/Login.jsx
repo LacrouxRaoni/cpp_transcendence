@@ -13,7 +13,7 @@ function Login() {
 	return(
 		<div className="content-login">
 			<h2 >Login Page</h2>
-			<p>Welcome, cadet, to PongAPI, the awesome game from the last project called 'Transcendence.</p>
+			<p>Welcome cadet to PongAPI, the awesome game from the last project called Transcendence.</p>
 			<p>Grab your favorite drink and food, log in, and enjoy the game with fellow cadets. Try to break the record and become the top player in the game.</p>
 			<button type="submit" onClick={handleSubmit}>Login</button>
 		</div>
