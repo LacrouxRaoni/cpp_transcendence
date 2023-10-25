@@ -1,16 +1,13 @@
 #include "UserEntity.hpp"
 
+
 UserEntity::UserEntity()
 {
 }
 
-UserEntity::UserEntity(std::string login)
+UserEntity::UserEntity(std::string login, std::string fNname, std::string lName, std::string nickname)
 {
 	this->login = login;
-}
-
-UserEntity::UserEntity(std::string fNname, std::string lName, std::string nickname)
-{
 	this->fNname = fNname;
 	this->lName = lName;
 	this->nickname = nickname;
@@ -36,89 +33,36 @@ UserEntity& UserEntity::operator=(UserEntity const &rsc)
 	return *this;
 }
 
-int	UserEntity::selectUserInDb()
+bool	UserEntity::checkIfUserIsinDb()
 {
-	//OPEN CONNECTION WITH DB
-	PGconn *conn;
-
-	conn = PQconnectdb("dbname=pongdb dbname=pongdb user=raoni password= host=localhost port=5432");
-	if (PQstatus(conn) == CONNECTION_BAD)
-	{
-		std::cout << "erro" << PQerrorMessage(conn) << std::endl;
-		PQfinish(conn);
-	}
-	std::cout << "conectado "<< PQstatus(conn) << std::endl;
-
-	PGresult *res;
-
-	std::string value;
-	//const char *query = "SELECT * FROM employees WHERE first_name = 'John' AND last_name = 'Doe'";
-	value.append("SELECT * FROM users WHERE user_login = ");
-	value.append("\'");
-	value.append(this->login);
-	value.append("\'");
-
-	res = PQexec(conn, value.c_str());
-	if (PQresultStatus(res) != PGRES_TUPLES_OK)
-	{
-		std::cout << value << std::endl;
-		std::cout << "erro" << PQerrorMessage(conn) << std::endl;
-		PQclear(res);
-	}
-	int numRows = PQntuples(res);
-    if (numRows > 0) {
-        std::cout << "Record exists in the table." << std::endl;
-    } else {
-        std::cout << "Record does not exist in the table." << std::endl;
-    }
-	PQclear(res);
-	PQfinish(conn);
-	return 0;
+	if (UserRepository::selectUserByUserLogin(this->login))
+		return true;
+	return false;
 }
 
-void UserEntity::saveInDb()
+void UserEntity::saveNewUser(const UserEntity user)
 {
-	//OPEN CONNECTION WITH DB
-	PGconn *conn;
+	std::cout << "aqui; " << user.GetLogin() << std::endl;
+	UserRepository::addNewUserInDb(user);
+}
 
-	conn = PQconnectdb("dbname=pongdb dbname=pongdb user=raoni password= host=localhost port=5432");
-	if (PQstatus(conn) == CONNECTION_BAD)
-	{
-		std::cout << "erro" << PQerrorMessage(conn) << std::endl;
-		PQfinish(conn);
-	}
-	std::cout << "conectado "<< PQstatus(conn) << std::endl;
+//GETTERS
+std::string	UserEntity::GetLogin() const
+{
+	return(this->login);
+}
 
+std::string UserEntity::GetFNname() const
+{
+	return(this->fNname);
+}
 
-	//EXECUTE SQL INSERT STATMENT
-	PGresult *res;
+std::string UserEntity::GetLName() const
+{
+	return(this->lName);
+}
 
-	std::string value;
-	value.append("INSERT INTO users (user_login, first_name, last_name, nickname) VALUES (");
-	value.append("\'");
-	value.append(this->nickname);
-	value.append("\'");
-	value.append(",");
-	value.append("\'");
-	value.append(this->fNname);
-	value.append("\'");
-	value.append(",");
-	value.append("\'");
-	value.append(this->lName);
-	value.append("\'");
-	value.append(",");
-	value.append("\'");
-	value.append(this->nickname);
-	value.append("\'");
-	value.append(")");
-
-
-	res = PQexec(conn, value.c_str());
-	if (PQresultStatus(res) != PGRES_COMMAND_OK)
-	{
-		std::cout << value << std::endl;
-		std::cout << "erro" << PQerrorMessage(conn) << std::endl;
-		PQclear(res);
-	}
-	PQfinish(conn);
+std::string UserEntity::GetNickname() const
+{
+	return(this->nickname);
 }

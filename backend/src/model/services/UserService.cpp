@@ -27,33 +27,20 @@ UserService& UserService::operator=(UserService const &rsc)
 	return *this;
 }
 
-void UserService::getEnvData(std::vector<std::string> &env)
+void UserService::buildRequestData(std::string &requestData, std::string &apiUrl, std::string &apiUserInfo, std::string &token)
 {
-	std::string filename = ".env";
-	std::ifstream file(filename);
-	std::string line;
-
-	if (!file.is_open())
-		throw ExceptionController("ERROR: Unable to open the file");
-	while (std::getline(file, line))
-		env.push_back(line);
-	file.close();
-}
-
-void UserService::buildRequestData(std::vector<std::string> &env, std::string &requestData, std::string &apiUrl, std::string &apiUserInfo, std::string &token)
-{
-	for (size_t i = 0; i < env.size(); i++)
+	for (size_t i = 0; i < ApiSetup::env.size(); i++)
 	{
 		if (i == 3)
-			requestData += "code=" + token + "&" + env.at(i);
+			requestData += "code=" + token + "&" + ApiSetup::env.at(i);
 		else if (i > 3)
 		{
-			apiUrl = env.at(i).substr(env.at(i).find("=") + 2, env.at(i).find_last_of("\"") - env.at(i).find("=") - 2);
-			apiUserInfo = env.at(i + 1).substr(env.at(i + 1).find("=") + 2, env.at(i + 1).find_last_of("\"") - env.at(i + 1).find("=") - 2);
+			apiUrl = ApiSetup::env.at(i).substr(ApiSetup::env.at(i).find("=") + 2, ApiSetup::env.at(i).find_last_of("\"") - ApiSetup::env.at(i).find("=") - 2);
+			apiUserInfo = ApiSetup::env.at(i + 1).substr(ApiSetup::env.at(i + 1).find("=") + 2, ApiSetup::env.at(i + 1).find_last_of("\"") - ApiSetup::env.at(i + 1).find("=") - 2);
 			break ;
 		}
 		else
-			requestData += env.at(i) + "&";
+			requestData += ApiSetup::env.at(i) + "&";
 	}
 
 	size_t found = requestData.find("\"");
@@ -107,18 +94,14 @@ std::string UserService::parse42Json(std::string responseBody, std::string param
 
 std::string UserService::treatTokenRequest(std::string token)
 {
-	std::vector<std::string>	env;
     std::string 				requestData;
 	std::string					apiUrl;
 	std::string					apiUserInfo;
 	std::string					auth_bearer;
     std::string					responseBody;
 
-	//PARTE 1
-	getEnvData(env);
-
 	//PARTE 2
-	buildRequestData(env, requestData, apiUrl, apiUserInfo, token);
+	buildRequestData(requestData, apiUrl, apiUserInfo, token);
 
 	//PARTE 3
 	responseBody = requestTo42Api(apiUrl.c_str(), requestData.c_str(),1);
@@ -135,31 +118,15 @@ std::string UserService::treatTokenRequest(std::string token)
     responseBody.clear();
 
 
-	std::cout << fName << std::endl;
-	std::cout << lName << std::endl;
-	std::cout << nickname << std::endl;
-	std::cout << hrefImg << std::endl;
-
-	UserEntity user(nickname);
-	if (user.selectUserInDb() == 0)
+	UserEntity user(nickname, fName, lName, nickname);
+	std::cout << user.GetLogin() << std::endl;
+	if (user.checkIfUserIsinDb() == true)
 		std::cout << "existe" << std::endl;
 	else
 	{
-		UserEntity newUser(fName, lName, nickname);
-		newUser.saveInDb();
-	}
-	
-	/*
-	oq tem no json para pegar
-	fName = "first_name"
-	lName = "last_name"
-	nickname = "login"
-	avatar = "image"
-
-	projects = ["name":, "status":]
-	achievments = "achievements[]"
-	*/
-	
+		user.saveNewUser(user);
+		std::cout << "salvo, meu bom!" << std::endl;
+	}	
 	return responseBody;
 }
 

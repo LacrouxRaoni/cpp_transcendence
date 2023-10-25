@@ -2,7 +2,7 @@
 # define USERENTITY_HPP
 
 #include <iostream>
-#include <postgresql/libpq-fe.h>
+#include "UserRepository.hpp"
 
 class UserEntity 
 {
@@ -14,14 +14,19 @@ class UserEntity
 
 	public:
 		UserEntity();
-		UserEntity(std::string login);
-		UserEntity(std::string fNname, std::string lName, std::string nickname);
+		UserEntity(std::string login, std::string fNname, std::string lName, std::string nickname);
 		~UserEntity();
 		UserEntity(const UserEntity &rsc);
 		UserEntity& operator=(UserEntity const &rsc);
 
-		int	selectUserInDb();
-		void	saveInDb();
+		bool	checkIfUserIsinDb();
+		void	saveNewUser(const UserEntity user);
+
+		//GETTERS
+		std::string	GetLogin() const;
+		std::string GetFNname() const;
+		std::string GetLName() const;
+		std::string GetNickname() const;
 };
 
 #endif

@@ -3,6 +3,7 @@
 
 #include "UserDto.hpp"
 #include "UserEntity.hpp"
+#include "ApiSetup.hpp"
 
 #include <fstream>
 #include <vector>
@@ -21,8 +22,7 @@ class UserService {
 
 		//METHODS
 		std::string		treatTokenRequest(std::string dtoChecker);
-		static void		getEnvData(std::vector<std::string> &env);
-		static void		buildRequestData(std::vector<std::string> &env, std::string &requestData, std::string &apiUrl, std::string &apiUserInfo, std::string &token);
+		static void		buildRequestData(std::string &requestData, std::string &apiUrl, std::string &apiUserInfo, std::string &token);
 		std::string		requestTo42Api(const char *param, const char *requestData, int method);
 		static size_t	WriteCallback(void* contents, size_t size, size_t nmemb, std::string* output);
 		std::string		parse42Json(std::string responseBody, std::string param);
