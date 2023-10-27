@@ -26,6 +26,7 @@ UserEntity& UserEntity::operator=(UserEntity const &rsc)
 {
 	if (this != &rsc)
 	{
+		this->login = rsc.nickname;
 		this->fNname = rsc.fNname;
 		this->lName = rsc.lName;
 		this->nickname = rsc.nickname;
@@ -42,7 +43,6 @@ bool	UserEntity::checkIfUserIsinDb()
 
 void UserEntity::saveNewUser(const UserEntity user)
 {
-	std::cout << "aqui; " << user.GetLogin() << std::endl;
 	UserRepository::addNewUserInDb(user);
 }
 

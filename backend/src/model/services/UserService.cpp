@@ -126,7 +126,40 @@ std::string UserService::treatTokenRequest(std::string token)
 	{
 		user.saveNewUser(user);
 		std::cout << "salvo, meu bom!" << std::endl;
-	}	
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	std::string tokenJwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXUyJ9.eyJpc3MiOiJhdXRoMCJ9.AbIJTDMFc7yUa5MhvcP03nJPyCPzZtQcGEp-zWfOkEE";
+    auto decoded = jwt::decode(tokenJwt);
+
+    for(auto& e : decoded.get_payload_json())
+	{
+        std::cout << e.first << " = " << e.second << std::endl;
+	}
+		
+	auto verifier = jwt::verify()
+	    .allow_algorithm(jwt::algorithm::hs256{ "secret" })
+	    .with_issuer("auth0");
+
+	verifier.verify(decoded);
+
+	auto new_token = jwt::create()
+    .set_issuer("auth0")
+    .set_type("JWS")
+    .set_payload_claim("sample", jwt::claim(std::string("test")))
+    .sign(jwt::algorithm::hs256{"secret"});
+
+	std::cout << new_token << std::endl;
+
+
 	return responseBody;
 }
 

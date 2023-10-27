@@ -20,6 +20,9 @@ FLAGS			=	-Wall -Wextra -Werror -std=c++17
 FLAG_PISTACHE	=	-lpistache
 FLAG_LIBCURL	=	-lcurl
 FLAG_LIBPQ		=	-lpq
+FLAG_CPP_JWT	=	-lcrypto
+FLAG_SSL		=	-lssl
+
 
 SRC_FILES		=	$(SYSTEM_DIR)Main.cpp \
 					$(SYSTEM_DIR)ApiSetup.cpp \
@@ -38,7 +41,7 @@ all:	$(NAME)
 
 $(NAME):	$(OBJ)
 	@echo done!!
-	@$(CC) $(FLAGS) $(OBJ) -g -o $(NAME) $(FLAG_PISTACHE) $(FLAG_LIBCURL) $(FLAG_LIBPQ)
+	@$(CC) $(FLAGS) $(OBJ) -g -o $(NAME) $(FLAG_PISTACHE) $(FLAG_LIBCURL) $(FLAG_LIBPQ) $(FLAG_CPP_JWT) $(FLAG_SSL)
 
 $(PATH_OBJ)/%.o:	$(SRC_DIR)/%.cpp
 	@mkdir -p $(PATH_OBJ)

@@ -5,6 +5,12 @@
 #include "UserEntity.hpp"
 #include "ApiSetup.hpp"
 
+#include <jwt-cpp/jwt.h>
+
+
+
+
+
 #include <fstream>
 #include <vector>
 #include <curl/curl.h>
