@@ -119,7 +119,7 @@ std::string UserService::treatTokenRequest(std::string token)
 
 
 	UserEntity user(nickname, fName, lName, nickname);
-	std::cout << user.GetLogin() << std::endl;
+	std::cout << user.getLogin() << std::endl;
 	if (user.checkIfUserIsinDb() == true)
 		std::cout << "existe" << std::endl;
 	else
@@ -131,14 +131,19 @@ std::string UserService::treatTokenRequest(std::string token)
 	
 	
 	
+
 	
+
+	auto new_token = jwt::create()
+    .set_issuer("auth0")
+    .set_type("JWS")
+    .set_payload_claim("sample", jwt::claim(std::string (user.getLogin().c_str())))
+    .sign(jwt::algorithm::hs256{"secret"});
 	
-	
-	
-	
-	
-	std::string tokenJwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXUyJ9.eyJpc3MiOiJhdXRoMCJ9.AbIJTDMFc7yUa5MhvcP03nJPyCPzZtQcGEp-zWfOkEE";
-    auto decoded = jwt::decode(tokenJwt);
+
+	std::cout << new_token << std::endl;
+
+    auto decoded = jwt::decode(new_token);
 
     for(auto& e : decoded.get_payload_json())
 	{
@@ -150,14 +155,6 @@ std::string UserService::treatTokenRequest(std::string token)
 	    .with_issuer("auth0");
 
 	verifier.verify(decoded);
-
-	auto new_token = jwt::create()
-    .set_issuer("auth0")
-    .set_type("JWS")
-    .set_payload_claim("sample", jwt::claim(std::string("test")))
-    .sign(jwt::algorithm::hs256{"secret"});
-
-	std::cout << new_token << std::endl;
 
 
 	return responseBody;

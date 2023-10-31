@@ -19,14 +19,14 @@ class UserEntity
 		UserEntity(const UserEntity &rsc);
 		UserEntity& operator=(UserEntity const &rsc);
 
-		bool	checkIfUserIsinDb();
-		void	saveNewUser(const UserEntity user);
+		bool		checkIfUserIsinDb();
+		void		saveNewUser(const UserEntity user);
 
 		//GETTERS
-		std::string	GetLogin() const;
-		std::string GetFNname() const;
-		std::string GetLName() const;
-		std::string GetNickname() const;
+		std::string	getLogin() const;
+		std::string getFNname() const;
+		std::string getLName() const;
+		std::string getNickname() const;
 };
 
 #endif

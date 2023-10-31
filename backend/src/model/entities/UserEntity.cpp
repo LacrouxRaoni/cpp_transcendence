@@ -47,22 +47,22 @@ void UserEntity::saveNewUser(const UserEntity user)
 }
 
 //GETTERS
-std::string	UserEntity::GetLogin() const
+std::string	UserEntity::getLogin() const
 {
 	return(this->login);
 }
 
-std::string UserEntity::GetFNname() const
+std::string UserEntity::getFNname() const
 {
 	return(this->fNname);
 }
 
-std::string UserEntity::GetLName() const
+std::string UserEntity::getLName() const
 {
 	return(this->lName);
 }
 
-std::string UserEntity::GetNickname() const
+std::string UserEntity::getNickname() const
 {
 	return(this->nickname);
 }

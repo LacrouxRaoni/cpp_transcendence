@@ -59,8 +59,10 @@ bool UserRepository::selectUserByUserLogin(std::string value)
 	res = PQexec(conn, query.c_str());
 	if (PQresultStatus(res) != PGRES_TUPLES_OK)
 	{
+		std::string msg = PQresultErrorMessage(res);
 		PQclear(res);
-		throw ExceptionController(PQerrorMessage(conn));
+		PQfinish(conn);
+		throw ExceptionController(msg);
 	}
 	numRows = PQntuples(res);
 	PQclear(res);
@@ -76,27 +78,25 @@ void UserRepository::addNewUserInDb(const UserEntity user)
 	PGresult	*res;
 	PGconn		*conn = connectWithDb();
 
-	std::cout << user.GetLogin() << std::endl;
 	query.append("INSERT INTO users (user_login, first_name, last_name, nickname) VALUES (");
-	query.append(involveValueWithQuote(user.GetNickname()));
+	query.append(involveValueWithQuote(user.getLogin()));
 	query.append(",");
-	query.append(involveValueWithQuote(user.GetFNname()));
+	query.append(involveValueWithQuote(user.getFNname()));
 	query.append(",");
-	query.append(involveValueWithQuote(user.GetLName()));
+	query.append(involveValueWithQuote(user.getLName()));
 	query.append(",");
-	query.append(involveValueWithQuote(user.GetNickname()));
+	query.append(involveValueWithQuote(user.getNickname()));
 	query.append(")");
-
-	std::cout << query << std::endl;
 
 	res = PQexec(conn, query.c_str());
 	if (PQresultStatus(res) != PGRES_COMMAND_OK)
 	{
+		std::string msg = PQresultErrorMessage(res);
 		PQclear(res);
 		PQfinish(conn);
-		throw ExceptionController(PQerrorMessage(conn));		
+		throw ExceptionController(msg);
 	}
 	PQclear(res);
-	PQfinish(conn);
+	PQfinish(conn);	
 }
 
