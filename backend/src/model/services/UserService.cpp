@@ -69,8 +69,8 @@ std::string UserService::requestTo42Api(const char *param, const char *requestDa
 		curl_easy_setopt(curl, CURLOPT_URL, param);
 		if (method == 1)
 			curl_easy_setopt(curl, CURLOPT_POSTFIELDS, requestData);
-		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, curl_slist_append(NULL, requestData));
-
+		else
+			curl_easy_setopt(curl, CURLOPT_HTTPHEADER, curl_slist_append(NULL, requestData));
 		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
 		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &responseBody);
 	}
@@ -100,24 +100,28 @@ std::string UserService::treatTokenRequest(std::string token)
 	std::string					auth_bearer;
     std::string					responseBody;
 
-	//PARTE 2
+
+	//BUILD REQUEST TO 42 API
 	buildRequestData(requestData, apiUrl, apiUserInfo, token);
 
-	//PARTE 3
+	//GET BEARER TOKEN
 	responseBody = requestTo42Api(apiUrl.c_str(), requestData.c_str(),1);
+	if (responseBody.find("error:") != responseBody.npos)
+		throw ExceptionController("ERROR: Invalid user");
 	size_t start = responseBody.find(":");
 	auth_bearer += "Authorization: Bearer " + responseBody.substr(start + 2, responseBody.find("\"", start + 2) - (start + 2));
     responseBody.clear();
 
-	//PARTE 4
-	responseBody = requestTo42Api(apiUserInfo.c_str(), auth_bearer.c_str(),0);
+	std::cout << "3" << std::endl;
+	//GET USER DATA FROM API
+	responseBody = requestTo42Api(apiUserInfo.c_str(), auth_bearer.c_str(), 0);
 	std::string fName = parse42Json(responseBody, "\"first_name\"");
 	std::string	lName = parse42Json(responseBody, "\"last_name\"");
 	std::string nickname = parse42Json(responseBody, "\"login\"");
 	std::string hrefImg = parse42Json(responseBody, "\"small\"");
     responseBody.clear();
 
-
+	std::cout << "4" << std::endl;
 	UserEntity user(nickname, fName, lName, nickname);
 	std::cout << user.getLogin() << std::endl;
 	if (user.checkIfUserIsinDb() == true)
@@ -133,17 +137,16 @@ std::string UserService::treatTokenRequest(std::string token)
 	
 
 	
+	//CREATE JWT
+	auto newToken = jwt::create()
+    .set_issuer(ApiSetup::getIssuerJwt())
+    .set_type(ApiSetup::getTypeJwt())
+    .set_payload_claim(ApiSetup::getClaimJwt(), jwt::claim(std::string (user.getLogin().c_str())))
+    .sign(jwt::algorithm::hs256{ApiSetup::getSecretJwt()});
 
-	auto new_token = jwt::create()
-    .set_issuer("auth0")
-    .set_type("JWS")
-    .set_payload_claim("sample", jwt::claim(std::string (user.getLogin().c_str())))
-    .sign(jwt::algorithm::hs256{"secret"});
-	
 
-	std::cout << new_token << std::endl;
 
-    auto decoded = jwt::decode(new_token);
+    auto decoded = jwt::decode(newToken);
 
     for(auto& e : decoded.get_payload_json())
 	{
@@ -151,13 +154,14 @@ std::string UserService::treatTokenRequest(std::string token)
 	}
 		
 	auto verifier = jwt::verify()
-	    .allow_algorithm(jwt::algorithm::hs256{ "secret" })
-	    .with_issuer("auth0");
+	    .allow_algorithm(jwt::algorithm::hs256{ ApiSetup::getSecretJwt() })
+	    .with_issuer(ApiSetup::getIssuerJwt());
 
 	verifier.verify(decoded);
 
 
-	return responseBody;
+
+	return newToken;
 }
 
 //GETTERS

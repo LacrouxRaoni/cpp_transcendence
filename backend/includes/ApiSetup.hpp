@@ -14,12 +14,16 @@ class ApiSetup
 		static std::string dbPassWd;
 		static std::string dbHost;
 		static std::string dbPort;
+		static std::string issuerJwt;
+		static std::string typeJwt;
+		static std::string claimJwt;
+		static std::string secretJwt;
 	public:
 		static std::vector<std::string>	env;
 		ApiSetup();
 		~ApiSetup();
 		void	getEnvData(std::string filename);
-		void	dbSetupEnv();
+		int		dbSetupEnv();
 		void	runServer();
 		void	setRoutes(Pistache::Rest::Router &router);
 
@@ -29,7 +33,10 @@ class ApiSetup
 		static std::string getDbPassWd();
 		static std::string getDbHost();
 		static std::string getDbPort();
-		
+		static std::string getIssuerJwt();
+		static std::string getTypeJwt();
+		static std::string getClaimJwt();
+		static std::string getSecretJwt();
 };
 
 #endif
